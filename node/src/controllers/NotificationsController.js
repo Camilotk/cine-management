@@ -16,14 +16,14 @@ module.exports = {
     }
   },
   async update(req, res) {
-    // try {
+    try {
       const {id}=req.params
       const notifications = await Notifications.findByPk(id);
       notifications.update(req.body);
       return res.json(notifications);
-    // } catch (error) {
-    //   return res.status(400).json({ error: `Oops, something went wrong :(` });
-    // }
+    } catch (error) {
+      return res.status(400).json({ error: `Oops, something went wrong :(` });
+    }
   },
 
 };

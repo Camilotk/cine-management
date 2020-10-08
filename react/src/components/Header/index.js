@@ -26,8 +26,7 @@ const Header = () => {
         setNot(!not) 
         
     } 
-    const User1= require(`../../../../node/src/images/${userInfo.perfil}`)
-    const User= require("../../assets/svgs/usuarios.svg")
+    
     return(
     <>
     <Not className={not? "show":""}/>
@@ -41,7 +40,8 @@ const Header = () => {
     <ul className="menuList">
     <MenuComponent to="/cart" textLink={<span className="fas fa-shopping-cart fa-2x icons" ></span>}/>
     <li ><a onClick={handleNot}><span  className="fas fa-bell fa-2x icons" ></span></a></li>
-    <MenuItemH link="/editUser" imgLink={userInfo.perfil?User1:User} textLink={userInfo.nome}/>
+    
+    <MenuItemH link="/editUser" imgLink={userInfo.perfil?require(`../../images/${userInfo.perfil}`):require("../../assets/svgs/usuarios.svg")} textLink={userInfo.nome}/>
     </ul>
     
     

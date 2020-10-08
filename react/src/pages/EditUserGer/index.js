@@ -113,8 +113,7 @@ export default function EditUser() {
   const reload=()=>{
     window.location.reload()
   }
-  const Perfil= require(`../../../../node/src/images/${userInfo.perfil}`)
-  const Photo = require("../../assets/svgs/cam.svg")
+ 
   return (
     
     <>
@@ -122,7 +121,7 @@ export default function EditUser() {
     <Logout/>
     <div className="conteudo">
     <Form ref={formRef} onSubmit={handleSubmit}>
-      <div className="perfilBox"><File imgLink={userInfo.perfil?Perfil:Photo} name="file"/></div>
+      <div className="perfilBox"><File imgLink={userInfo.perfil?require(`../../images/${userInfo.perfil}`):require("../../assets/svgs/usuarios.svg")} name="file"/></div>
       
       <div className="inputItemCad"><span className="spanCad">SEU NOME:</span> <Input id='cadNome' defaultValue={userInfo.nome} required name="nome" type="text" /></div>
       <div className="inputItemCad"><span className="spanCad">SEU EMAIL:</span>  <Input id='cadEmail' defaultValue={userInfo.email} required name="email" type="email" /></div>

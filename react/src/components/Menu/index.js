@@ -27,8 +27,7 @@ const Menu = () => {
       
     },[])
     
-    const User1= require(`../../../../node/src/images/${userInfo.perfil}`)
-    const User= require("../../assets/svgs/usuarios.svg")
+   
     return (
         <>
             <div className="btn" onClick={() => {setToggleSidebar(true)}}>
@@ -37,7 +36,7 @@ const Menu = () => {
             <nav className={toggleSidebar ? "sidebar show" : "sidebar"} >
                 <ul>
                     
-                    <MenuUser link="/editUserGer" imgLink={userInfo.perfil?User1:User} textLink={userInfo.nome}/>
+                    <MenuUser link="/editUserGer" imgLink={userInfo.perfil?require(`../../images/${userInfo.perfil}`):require("../../assets/svgs/usuarios.svg")} textLink={userInfo.nome}/>
                     <MenuItem link="/users" imgLink={SVG_usuario} textLink="Usuários"/>
                     <MenuItem link="/rooms" imgLink={SVG_salas} textLink="Salas"/>
                     <MenuItem link="/movies" imgLink={SVG_filmes} textLink="Filmes"/>
