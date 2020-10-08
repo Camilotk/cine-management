@@ -8,6 +8,7 @@ class Users extends Model {
     password: DataTypes.STRING,
     nivel: DataTypes.INTEGER,
     faturamento: DataTypes.STRING,
+    perfil: DataTypes.STRING,
     }, {
       sequelize,
       tableName: 'Users',

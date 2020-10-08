@@ -29,7 +29,7 @@ module.exports = {
       },
       faturamento: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
       },
       status: {
         allowNull: false,

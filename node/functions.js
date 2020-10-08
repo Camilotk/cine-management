@@ -125,61 +125,66 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
     const Sessions = require( './src/models/sessions');
     const Movies = require( './src/models/movies');
     const Notifications = require('./src/models/notifications')
-    const sessionsMovie= await Sessions.findAll({where: {
-        movie_id: movieId
-    }})
-    const seatsSession= await Seats.findAll({where: {
-        session_id: session
-    }})
+    const sessionsMovie= await Sessions.findAll({
+        where: {movie_id: movieId},
+        
+    })
+    const seatsSession= await Seats.findAll({
+    where: {session_id: session},
+    
+})
     const movie = await Movies.findByPk(movieId);
     if(seatsSession.length==0){
-
+        return true
     }else{
-    var diferenca= 999999999999
-    for(i=0;i<seatsSession.length;i++){
-    if(sessionsMovie.length!==1){
-        for(c=0;c<sessionsMovie.length;c++){
-            
-            if(sessionsMovie[c].movie_id==movieId && sessionsMovie[c].animacao==animacao && sessionsMovie[c].audio==audio && sessionsMovie[c].id !== session && sessionsMovie[c].data.getTime()==data.getTime()){
-                    var validate= await this.confereAssentos(seatsSession[i].refAssentos, sessionsMovie[c].id)
-                    if(validate==true){
-                        var dataHoraTeste=this.juntaDataHora(sessionsMovie[c].horario, sessionsMovie[c].data)
-                        var dataHoraSession=this.juntaDataHora(horario, data)
-                        
-                        if(Math.abs(dataHoraSession-dataHoraTeste)<diferenca){
-                            diferenca=Math.abs(dataHoraSession-dataHoraTeste)
-                            var winSession= sessionsMovie[c]
+    await seatsSession.map(async seat=>{
+        var diferenca= 999999999999
+        if(sessionsMovie.length!==1){
+           for(let sessions of sessionsMovie){
+                if((sessions.movie_id==movieId) && (sessions.animacao==animacao) && (sessions.audio==audio) && (sessions.id !== session) && (sessions.data.getTime()==data.getTime())){
+                        var validate= await this.confereAssentos(seat.refAssentos, sessions.id)
+                        if(validate==true){
+                            var dataHoraTeste=this.juntaDataHora(sessions.horario, sessions.data)
+                            var dataHoraSession=this.juntaDataHora(horario, data)
                             
-                            var user= seatsSession[i].user_id
-                            var assentos= seatsSession[i].refAssentos
-                            var texto= "A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada. No entanto, temos disponivel uma sessão no mesmo dia as "+winSession.horario.substr(0,5)+" com a mesma composição, gostaria de reservar seu lugar?"
-                            var req={texto: texto, status:1, refAssentos: assentos, user_id: user, session_id:winSession.id}
-                            
+                            if(Math.abs(dataHoraSession-dataHoraTeste)<diferenca){
+                                diferenca=Math.abs(dataHoraSession-dataHoraTeste)
+                                var winSession= sessions
+                                var user= seat.user_id
+                                var assentos= seat.refAssentos
+                                var texto= "A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada. No entanto, temos disponivel uma sessão no mesmo dia as "+winSession.horario.substr(0,5)+" com a mesma composição, gostaria de reservar seu lugar?"
+                                var req={texto: texto, status:1, refAssentos: assentos, user_id: user, session_id:winSession.id}
+                                
+                                
+                            }
                             
                         }
-                        
-                    }
-                
+                    
+                }
             }
-        }
-        if(winSession){
-            await Notifications.create(req);
-            return true
-        }else{
+            if(winSession){
+                await Notifications.create(req);
+                
+            }else{
+               
+            var user =seat.user_id
             var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
             var req={texto: texto, status:1, user_id: user}
             await Notifications.create(req);
-            return true
+            }
+           
+                    
+        }else{
+           
+            var user =seat.user_id
+            var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
+            var req={texto: texto, status:1, user_id: user}
+            await Notifications.create(req);
+                 
         }
-       
-                
-    }else{
-        var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
-        var req={texto: texto, status:1, user_id: user}
-        await Notifications.create(req);
-        return true      
-    }
-    }
+        
+    })
+    return true
     }
     },
     async attFaturamentos(){
@@ -192,7 +197,9 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
                 if(this.confereRealizado(hora, data)==true && sessions[c].status!==2){
                     const Movies = require( './src/models/movies');
                     const movie= await Movies.findByPk(sessions[c].movie_id)
-                    movie.update({faturamento:sessions[c].faturamento})
+                    var newFaturamento=parseFloat(movie.faturamento)+parseFloat(sessions[c].faturamento)
+                    newFaturamento=newFaturamento.toFixed(2)
+                    movie.update({faturamento:newFaturamento})
                     sessions[c].update({status:2})
 
                 }
@@ -203,13 +210,18 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
             return true
         }
     },
-    async criaPreco(){
+    async start(){
         const Prices = require( './src/models/prices');
         const prices= await Prices.findAll()
         if(prices.length==0){
             await Prices.create({preco2d:"0",preco3d:"0" })
         }
-            
+        const Users = require( './src/models/users');
+        const users= await Users.findAll()  
+        if(users.length==0){
+            await Users.create({nome: "Admin",email: "admin@admin.com", password: "8e3d44d855f3fff31a57229bcd76ff2e",nivel: 1,faturamento: 0})
+            // senha:Administrador2020
+        } 
         
     },
   }

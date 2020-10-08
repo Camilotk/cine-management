@@ -1,15 +1,53 @@
 const Movies = require( '../models/movies');
 const Functions = require( '../../functions');
+const sequelize =require('sequelize')
 module.exports = {
   async index(req, res) {
     try {
       const { page=1 }= req.query;
         const options = {
+          
           page, // Default 1
-          paginate: 10, // Default 25
+          paginate: 10, 
           
         }
         const movie = await Movies.paginate(options);
+      
+      if(!movie){
+        return res.json("Movies not found.")
+      }
+
+      return res.json(movie);
+      
+    } catch (error) {
+      return res.status(400).json({ error: `There's no movies, my friend :(` });
+    }
+  },
+  async relIndex(req, res) {
+    try {
+      const { page=1 }= req.query;
+        const options = {
+          order: sequelize.literal('faturamento DESC'),
+          page, // Default 1
+          paginate: 10, 
+          
+        }
+        const movie = await Movies.paginate(options);
+      
+      if(!movie){
+        return res.json("Movies not found.")
+      }
+
+      return res.json(movie);
+      
+    } catch (error) {
+      return res.status(400).json({ error: `There's no movies, my friend :(` });
+    }
+  },
+  async indexAll(req, res) {
+    try {
+      
+        const movie = await Movies.findAll();
       
       if(!movie){
         return res.json("Movies not found.")
@@ -39,7 +77,7 @@ async show(req, res) {
   async store(req, res) {
     try {
       const { imagem, titulo, descricao, duracao } = req.body
-      const faturamento="0"
+      const faturamento="0.00"
 
     const movie = await Movies.create({
       imagem, titulo, descricao, duracao, faturamento
@@ -47,17 +85,17 @@ async show(req, res) {
     res.json(movie);
     
     } catch (error) {
-      return res.status(400).json({ error: `Oops, something went wrong :(` });
+      return res.status(400).json({ error: `Titulo já ou nome da imagem já cadastrados.` });
     }
   },
 
   async update(req, res) {
     try {
       const { id } = req.params;
-      const movies2= await Movies.findAll()
+      const movies= await Movies.findAll()
       
-      for(c=0; c<movies2.length;c++){ 
-        if(Functions.simplify(movies[c].titulo).indexOf(Functions.simplify(req.body.titulo))!==-1){
+      for(c=0; c<movies.length;c++){ 
+        if(movies[c].titulo==req.body.titulo){
           return res.status(400).json({ error:'Este título já está cadastrado'} );
         }
       }
@@ -67,7 +105,7 @@ async show(req, res) {
 
       return res.json(movie);
     } catch (error) {
-      return res.status(400).json({ error: 'Este título já está cadastrado' });
+      return res.status(400).json({ error: 'Erro desconhecido' });
     }
   },
   async search(req, res) {

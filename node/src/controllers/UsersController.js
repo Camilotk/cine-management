@@ -1,5 +1,6 @@
 const Users = require('../models/users')
 const Functions = require( '../../functions');
+const sequelize =require('sequelize')
 module.exports = {
   async index(req, res) {
     try {
@@ -7,6 +8,31 @@ module.exports = {
       const options = {
         page, // Default 1
         paginate: 10, // Default 25
+        
+      }
+      const users = await Users.paginate(options);
+      return res.json(users);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no users, my friend :(` });
+    }
+  },
+  async allIndex(req, res) {
+    try {
+      
+      const users = await Users.findAll();
+      return res.json(users);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no users, my friend :(` });
+    }
+  },
+  async relIndex(req, res) {
+    try {
+      const { page=1 }= req.query;
+      const options = {
+        order: sequelize.literal('faturamento DESC'),
+        page, // Default 1
+        paginate: 10, // Default 25
+        
         
       }
       const users = await Users.paginate(options);
@@ -52,7 +78,7 @@ async show(req, res) {
 
   async store(req, res) {
     try {
-      req.body.faturamento= "0"
+      req.body.faturamento= '0.00'
     const users = await Users.create(req.body);
     
    

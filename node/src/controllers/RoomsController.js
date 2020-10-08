@@ -17,6 +17,16 @@ module.exports = {
       return res.status(400).json({ error: `There's no rooms, my friend :(` });
     }
   },
+  async indexAll(req, res) {
+    try {
+      
+      const rooms = await Rooms.findAll();
+      
+      return res.json(rooms);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no rooms, my friend :(` });
+    }
+  },
 
 async show(req, res) {
     try {
@@ -62,7 +72,7 @@ async show(req, res) {
       var finalRooms=[]
       for(c=0; c<rooms.length;c++){
         
-        if(Functions.simplify(rooms[c].nome).indexOf(Functions.simplify(nome))!==-1){
+        if(rooms[c].nome==nome){
           finalRooms.push(rooms[c].id)
         }
       }

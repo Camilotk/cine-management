@@ -5,7 +5,7 @@ class Notifications extends Model {
     super.init({
     texto: DataTypes.STRING,
     refAssentos: DataTypes.JSON,
-    status: DataTypes.JSON
+    status: DataTypes.INTEGER
     }, {
       sequelize,
       tableName: 'Notifications',

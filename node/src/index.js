@@ -6,7 +6,7 @@ require('../database')
 setInterval(function(){
     Functions.attFaturamentos()
 },60000)
-Functions.criaPreco()
+Functions.start()
 const app = express();
 app.use(cors());
 app.use(express.json());

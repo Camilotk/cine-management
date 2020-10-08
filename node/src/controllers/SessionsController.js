@@ -28,7 +28,7 @@ module.exports = {
   },
 
   async store(req, res) {
-    // try {
+    try {
         const {data, horario, animacao, audio, movie_id, room_id} = req.body;
         console.log(data)
         if(Functions.confereRealizado(horario,data)){
@@ -46,7 +46,7 @@ module.exports = {
         if (!room) {
           return res.status(400).json({ error: 'Room not found' });
         }
-        const faturamento="0"
+        const faturamento="0.00"
         const status=1
         
         const session = await Sessions.create({
@@ -66,9 +66,36 @@ module.exports = {
           return res.status(400).json({ error: 'Horário ocupado' });
         }
         
-    // } catch (error) {
-    //   return res.status(400).json({ error: `Oops, something went wrong :(` });
-    // }
+    } catch (error) {
+      return res.status(400).json({ error: `Oops, something went wrong :(` });
+    }
+  },
+  async search(req, res) {
+    try {
+      const { text } = req.params;
+      const sessions= await Sessions.findAll(
+        {include: [{association: 'movies' }, {association: 'rooms'}]}
+      )
+      var finalSessions=[]
+      for(c=0; c<sessions.length;c++){
+        
+        if(Functions.simplify(sessions[c].movies.titulo).indexOf(Functions.simplify(text))!==-1){
+          finalSessions.push(sessions[c].id)
+        }
+      }
+      const { page=1 }= req.query;
+      const options = {
+        page, // Default 1
+        paginate: 10, // Default 25
+        where: {id:finalSessions},
+        include: [{association: 'movies' }, {association: 'rooms'}]
+      }
+      
+      const sessions2= await Sessions.paginate(options)
+      return res.json(sessions2);
+    } catch (error) {
+      return res.status(400).json( error );
+    }
   },
   async delete(req, res) {
     // try {
@@ -91,7 +118,7 @@ module.exports = {
       }
       
     // } catch (error) {
-    //   return res.status(400).json({ error: `Oops, user not found, my friend :(` });
+    //   return res.status(400).json({ error: `Erro ao deletar` });
     // }
   },
 };

@@ -10,6 +10,7 @@ module.exports = {
       imagem: {
         allowNull: false,
         type: DataTypes.STRING,
+        unique: true
       },
       titulo: {
         allowNull: false,
@@ -26,7 +27,7 @@ module.exports = {
       },
       faturamento: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
       },
       createdAt: {
         allowNull: false,
