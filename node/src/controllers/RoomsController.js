@@ -72,7 +72,7 @@ async show(req, res) {
       var finalRooms=[]
       for(c=0; c<rooms.length;c++){
         
-        if(rooms[c].nome==nome){
+        if(rooms[c].nome.startsWith(nome)){
           finalRooms.push(rooms[c].id)
         }
       }

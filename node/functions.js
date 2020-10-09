@@ -152,7 +152,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
                                 var winSession= sessions
                                 var user= seat.user_id
                                 var assentos= seat.refAssentos
-                                var texto= "A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada. No entanto, temos disponivel uma sessão no mesmo dia as "+winSession.horario.substr(0,5)+" com a mesma composição, gostaria de reservar seu lugar?"
+                                var texto= "A sua sessão para o filme: "+movie.titulo+" no dia "+this.formataData(data)+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada. No entanto, temos disponivel uma sessão no mesmo dia as "+winSession.horario.substr(0,5)+" com a mesma composição, gostaria de reservar seu lugar?"
                                 var req={texto: texto, status:1, refAssentos: assentos, user_id: user, session_id:winSession.id}
                                 
                                 
@@ -168,7 +168,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
             }else{
                
             var user =seat.user_id
-            var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
+            var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+this.formataData(data)+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
             var req={texto: texto, status:1, user_id: user}
             await Notifications.create(req);
             }
@@ -177,7 +177,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
         }else{
            
             var user =seat.user_id
-            var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' })+" das "+horario.substr(0,5)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
+            var texto="A sua sessão para o filme: "+movie.titulo+" no dia "+this.formataData(data)+" as "+horarioFinal.substr(0,5)+" foi cancelada."
             var req={texto: texto, status:1, user_id: user}
             await Notifications.create(req);
                  
@@ -214,7 +214,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
         const Prices = require( './src/models/prices');
         const prices= await Prices.findAll()
         if(prices.length==0){
-            await Prices.create({preco2d:"0",preco3d:"0" })
+            await Prices.create({preco2d:"10",preco3d:"20" })
         }
         const Users = require( './src/models/users');
         const users= await Users.findAll()  
@@ -224,4 +224,9 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
         } 
         
     },
+    formataData(x){
+        data=new Date(x)
+        data=new Date(data.getTime() + (1 * 24 * 60 * 60 * 1000))
+        return(data.toLocaleString('pt-BR',{day:'numeric' , month:'numeric' , year:'numeric' }))
+    }
   }

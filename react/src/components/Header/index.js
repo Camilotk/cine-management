@@ -38,8 +38,8 @@ const Header = () => {
     <MenuItemH link="/historico"  textLink="HISTÓRICO"/>
     </ul>
     <ul className="menuList">
-    <MenuComponent to="/cart" textLink={<span className="fas fa-shopping-cart fa-2x icons" ></span>}/>
-    <li ><a onClick={handleNot}><span  className="fas fa-bell fa-2x icons" ></span></a></li>
+    <li><a><span className="fas fa-shopping-cart fa-2x icons" ></span></a></li>
+    <li style={not ? {borderBottom: '3px solid royalblue'}:{}}><a onClick={handleNot}><span  className="fas fa-bell fa-2x icons" ></span></a></li>
     
     <MenuItemH link="/editUser" imgLink={userInfo.perfil?require(`../../images/${userInfo.perfil}`):require("../../assets/svgs/usuarios.svg")} textLink={userInfo.nome}/>
     </ul>

@@ -2,7 +2,7 @@ const Sessions = require( '../models/sessions');
 const Rooms = require( '../models/rooms');
 const Movies = require( '../models/movies');
 const Functions = require( '../../functions');
-
+const sequelize=require("sequelize")
 module.exports = {
   async index(req, res) {
     try {
@@ -24,6 +24,60 @@ module.exports = {
         return res.json(sessions);
     } catch (error) {
       return res.status(400).json({ error: `There's no sessions, my friend :(` });
+    }
+  },
+  async allIndex(req, res) {
+    try {
+      const options = {
+        include: [{association: 'movies' }, {association: 'rooms'}],
+        order: sequelize.literal('data ASC'),
+        
+      }
+      
+        const sessions = await Sessions.findAll(options);
+        
+        
+        if(!sessions){
+          return res.status(400).json({ error: `There's no sessions, my friend :(` });
+        }
+    
+        return res.json(sessions);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no sessions, my friend :(` });
+    }
+  },
+  async indexByDate(req, res) {
+    try {
+      const {data}= req.params
+      const options = {
+        include: [{association: 'movies' }, {association: 'rooms'}],
+        order: sequelize.literal('movies.faturamento DESC'),
+        where:{data:data}
+        
+      }
+      
+        const sessions = await Sessions.findAll(options);
+        
+        
+        if(!sessions){
+          return res.status(400).json({ error: `There's no sessions, my friend :(` });
+        }
+    
+        return res.json(sessions);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no sessions, my friend :(` });
+    }
+  },
+  async show(req, res) {
+    try {
+      const { id } = req.params;
+      const sessions = await Sessions.findByPk(id,{
+        include: [{association: 'movies' }, {association: 'rooms'}],
+        
+      });
+      return res.json(sessions);
+    } catch (error) {
+      return res.status(400).json( error );
     }
   },
 
@@ -79,7 +133,7 @@ module.exports = {
       var finalSessions=[]
       for(c=0; c<sessions.length;c++){
         
-        if(Functions.simplify(sessions[c].movies.titulo).indexOf(Functions.simplify(text))!==-1){
+        if(Functions.simplify(sessions[c].movies.titulo).startsWith(Functions.simplify(text))){
           finalSessions.push(sessions[c].id)
         }
       }
@@ -98,7 +152,7 @@ module.exports = {
     }
   },
   async delete(req, res) {
-    // try {
+    try {
       const { id } = req.params
       const session = await Sessions.findByPk(id);
       const {data,horario,horarioFinal, movie_id, animacao, audio} =session;
@@ -117,8 +171,8 @@ module.exports = {
         return res.status(400).json({ error: 'Você só pode apagar uma sessão 10 dias antes da sua data' });
       }
       
-    // } catch (error) {
-    //   return res.status(400).json({ error: `Erro ao deletar` });
-    // }
+    } catch (error) {
+      return res.status(400).json({ error: `Erro ao deletar` });
+    }
   },
 };

@@ -47,7 +47,11 @@ module.exports = {
   async indexAll(req, res) {
     try {
       
-        const movie = await Movies.findAll();
+        const movie = await Movies.findAll(
+          {
+            order: sequelize.literal('faturamento DESC'),
+          }
+        );
       
       if(!movie){
         return res.json("Movies not found.")
@@ -67,7 +71,7 @@ async show(req, res) {
       
 
 
-      return res.json(movie);
+      return res.json(movies);
       
     } catch (error) {
       return res.status(400).json( error );
@@ -115,7 +119,7 @@ async show(req, res) {
       var finalMovies=[]
       for(c=0; c<movies.length;c++){
         
-        if(Functions.simplify(movies[c].titulo).indexOf(Functions.simplify(titulo))!==-1){
+        if(Functions.simplify(movies[c].titulo).startsWith(Functions.simplify(titulo))){
           finalMovies.push(movies[c].id)
         }
       }

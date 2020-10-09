@@ -1,5 +1,5 @@
 const {Model, DataTypes} = require('sequelize');
-
+const sequelizePaginate = require('sequelize-paginate')
 class Seats extends Model {
   static init(sequelize) {
     super.init({
@@ -16,5 +16,5 @@ class Seats extends Model {
     this.belongsTo(models.Users, { foreignKey: 'user_id', as: 'users' });
   }
 }
-
+sequelizePaginate.paginate(Seats)
 module.exports = Seats;

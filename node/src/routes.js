@@ -10,6 +10,7 @@ const SessionsController = require('./controllers/SessionsController');
 const SeatsController = require('./controllers/SeatsController');
 const NotificationsController = require('./controllers/NotificationsController');
 const PricesController = require('./controllers/PricesController');
+const HistoryController = require('./controllers/HistoryController');
 
 routes.get('/users', UsersController.index); 
 routes.get('/allUsers', UsersController.allIndex); 
@@ -45,15 +46,22 @@ routes.delete('/movies/:id', MoviesController.delete);
 routes.get('/movieSearch/:titulo', MoviesController.search);
 
 routes.get('/sessions', SessionsController.index); 
+routes.get('/allSessions', SessionsController.allIndex); 
+routes.get('/sessionsByDate/:data', SessionsController.indexByDate); 
+routes.get('/sessions/:id', SessionsController.show);
 routes.post('/sessions', SessionsController.store);
 routes.delete('/sessions/:id', SessionsController.delete);
 routes.get('/sessionSearch/:text', SessionsController.search);
 
 routes.get('/seats', SeatsController.index); 
 routes.get('/seats/:id', SeatsController.show);
+routes.get('/seatsBySession/:session', SeatsController.indexBySession);
 routes.post('/seats', SeatsController.store);
 
 routes.put('/notifications/:id', NotificationsController.update);
 routes.get('/notifications/:id', NotificationsController.index);
-routes.put('/prices/:id', PricesController.update);
+
+routes.get('/prices/', PricesController.index);
+routes.get('/historicoSearch/:id/:text', HistoryController.search);
+routes.get('/historicos/:id', HistoryController.index); 
 module.exports = routes;

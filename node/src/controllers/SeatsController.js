@@ -1,13 +1,27 @@
 const Seats = require( '../models/seats');
 const Users = require( '../models/users');
 const Sessions = require( '../models/sessions');
+const Prices = require( '../models/prices');
 const Functions = require( '../../functions');
+const { use } = require('../routes');
 
 module.exports = {
   async index(req, res) {
     try {
         const seats = await Seats.findAll({
             include: [{association: 'users' }, {association: 'sessions'}]
+          });
+          return res.json(seats);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no rooms, my friend :(` });
+    }
+  },
+  async indexBySession(req, res) {
+    try {
+        const {session}=req.params
+        const seats = await Seats.findAll({
+            include: [{association: 'users' }, {association: 'sessions'}],
+            where:{session_id:session}
           });
           return res.json(seats);
     } catch (error) {
@@ -30,7 +44,7 @@ async show(req, res) {
   async store(req, res) {
     try {
         const {user_id, refAssentos, session_id} = req.body;
-        
+        const prices= await Prices.findAll()
         const user = await Users.findByPk(user_id);
         const session = await Sessions.findByPk(session_id);
         const validate = await Functions.confereAssentos(refAssentos, session_id)
@@ -43,6 +57,13 @@ async show(req, res) {
           return res.status(400).json({ error: 'Session not found' });
         }
         const qntAssentos= refAssentos.length
+        if(session.animacao==1){
+          var valor=qntAssentos*prices[0].preco2d
+        }else{
+          var valor=qntAssentos*prices[0].preco3d
+        }
+        user.update({faturamento:(parseFloat(user.faturamento))+valor})
+        session.update({faturamento:(parseFloat(session.faturamento))+valor})
         const seat = await Seats.create({
             user_id,
             qntAssentos,

@@ -9,7 +9,8 @@
   overflow-x: hidden;
   overflow-y: scroll;
   margin-top: 65px;
-  border:1px solid silver
+  border:1px solid silver;
+  z-index: 100;
 }
 .notification.show{
   display: block;

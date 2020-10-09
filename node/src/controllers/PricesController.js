@@ -1,7 +1,14 @@
 const Prices = require('../models/prices')
 
 module.exports = {
-  
+  async index(req, res) {
+    try {
+      const prices = await Prices.findAll();
+      return res.json(prices);
+    } catch (error) {
+      return res.status(400).json({ error: `There's no prices, my friend :(` });
+    }
+  },
 
   async update(req, res) {
     try {

@@ -10,10 +10,12 @@ import Users from './pages/Users';
 import Movies from './pages/Movies';
 import Sessions from './pages/Sessions';
 import Cadastro from './pages/Cadastro';
+import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Historico from './pages/Historico';
 import AuthApi from "./AuthApi"
+
 const Routes = () => {
   const Auth =React.useContext(AuthApi)
 
@@ -32,6 +34,7 @@ const Routes = () => {
       <ProtectedUserRoute auth={Auth.auth} path="/home" exact component={Home}/>
       <ProtectedUserRoute auth={Auth.auth} path="/historico" exact component={Historico}/>
       <ProtectedUserRoute auth={Auth.auth} path="/editUser" exact component={EditUser}/>
+      <ProtectedUserRoute auth={Auth.auth} path="/cart/:id" exact component={Cart}/>
     </Switch>
   </BrowserRouter>
 )
