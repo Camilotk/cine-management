@@ -97,13 +97,13 @@ async show(req, res) {
     try {
       const { id } = req.params;
       const movies= await Movies.findAll()
-      
+      const movie = await Movies.findByPk(id);
       for(c=0; c<movies.length;c++){ 
-        if(movies[c].titulo==req.body.titulo){
+        if(movies[c].titulo==req.body.titulo && movies[c].titulo!==movie.titulo ){
           return res.status(400).json({ error:'Este título já está cadastrado'} );
         }
       }
-      const movie = await Movies.findByPk(id);
+      
 
       movie.update(req.body);
 

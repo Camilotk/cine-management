@@ -51,14 +51,14 @@ async show(req, res) {
     try {
       const { id } = req.params;
       const rooms= await Rooms.findAll()
-      
+      const rooms2 = await Rooms.findByPk(id);
       for(c=0; c<rooms.length;c++){
         
-        if(Functions.simplify(rooms[c].nome).indexOf(Functions.simplify(req.body.nome))!==-1){
+        if(Functions.simplify(rooms[c].nome).indexOf(Functions.simplify(req.body.nome))!==-1 && Functions.simplify(req.body.nome)!==Functions.simplify(rooms2.nome) ){
           return res.status(400).json({ error:'Este nome de sala já está cadastrado'} );
         }
       }
-      const rooms2 = await Rooms.findByPk(id);
+      
       rooms2.update(req.body);
       return res.json(rooms2);
     } catch (error) {
