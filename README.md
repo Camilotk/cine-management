@@ -25,6 +25,9 @@ npm install nodemon -D
 npm run dev (com este comando servidor deve iniciar, já criando alguns registros no banco de dados, como o valor dos ingressos pré setados para teste e um usuário do tipo gerente que será capaz de criar outros usuários desse tipo.)
 
 Com o node já rodando, está na hora de iniciar o react. Novamente abra o prompt de comando e vá para o diretório do projeto.
+
+Crie uma pasta chamada "images" dentro da pasta src.
+
 Entre na pasta react e execute os seguintes comandos:
 
 npm init -y
