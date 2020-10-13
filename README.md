@@ -16,8 +16,6 @@ npm init -y
 
 npm install express
 
-npx sequelize init
-
 npx sequelize db:migrate (este comando vai criar as tabelas do MySQL)
 
 npm install nodemon -D
