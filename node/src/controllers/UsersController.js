@@ -62,7 +62,7 @@ async show(req, res) {
       var finalUsers=[]
       for(c=0; c<users.length;c++){
         
-        if(Functions.simplify(users[c].nome).startsWith(Functions.simplify(text))){
+        if(Functions.simplify(users[c].nome).startsWith(Functions.simplify(nome))){
           finalUsers.push(users[c].id)
         }
       }
