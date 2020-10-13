@@ -44,7 +44,6 @@
     color: royalblue
 }
 .salas div{
-    height: 80px;
     display: flex;
     flex-direction: column;
     

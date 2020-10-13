@@ -126,45 +126,49 @@ export default class Home extends Component{
        this.setState({page:pageNumber})
     }
     carregaSessions(roomId, movieId){
+        var array=[]
         for(let c=0;c<this.state.sessions.length;c++){
             if(this.state.click3d){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==2){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.click3d && this.state.clickLeg){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==2 && this.state.sessions[c].audio==2){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.click3d && this.state.clickDub){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==2 && this.state.sessions[c].audio==1){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.click2d && this.state.clickDub){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==1 && this.state.sessions[c].audio==1){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.click2d && this.state.clickLeg){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==1 && this.state.sessions[c].audio==2){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.click2d){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].animacao==1){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             } else if(this.state.clickDub){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].audio==1){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
             }else if(this.state.clickLeg){
                 if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId && this.state.sessions[c].audio==2){
-                    return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                    array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
                     }
         }else{
             if(this.state.sessions[c].movie_id==movieId&& this.state.sessions[c].room_id==roomId){
-                return(<Link to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
-                }             
+                array.push(<Link key={this.state.sessions[c].id} to={`cart/${this.state.sessions[c].id}`} className="sessionButton">{this.state.sessions[c].horario.substring(5,0)}<span>{this.animacao(this.state.sessions[c].animacao)}</span><span>{this.audio(this.state.sessions[c].audio)}</span></Link>)
+                }
+               
+                             
         }
     }
+    return(array)
 }
     loadProducts = async () => {
 
@@ -237,7 +241,10 @@ export default class Home extends Component{
                         {this.state.rooms.map(room=>(
                             <div key={room.id}>
                             <span  className="nomesala">{room.nome}</span>
-                            {this.carregaSessions(room.id,movie.id)}
+                            {
+                            this.carregaSessions(room.id,movie.id)
+                            
+                            }
                             </div>
                         ))}
                             </div>
