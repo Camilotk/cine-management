@@ -1,7 +1,9 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Movies = require( '../models/movies');
 const Functions = require( '../../functions');
 const sequelize =require('sequelize')
 module.exports = {
+  // pega todos os filmes e retorna em paginação
   async index(req, res) {
     try {
       const { page=1 }= req.query;
@@ -23,6 +25,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no movies, my friend :(` });
     }
   },
+  // pega todos os filmes ordenados por faturamento com paginação 
   async relIndex(req, res) {
     try {
       const { page=1 }= req.query;
@@ -44,6 +47,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no movies, my friend :(` });
     }
   },
+  // pega todos os filmes ordenados por faturamento
   async indexAll(req, res) {
     try {
       
@@ -63,7 +67,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no movies, my friend :(` });
     }
   },
-
+//busca só um filme pelo id passado 
 async show(req, res) {
     try {
         const { id } = req.params;
@@ -77,7 +81,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
-
+// cria um registro de filme 
   async store(req, res) {
     try {
       const { imagem, titulo, descricao, duracao } = req.body
@@ -92,7 +96,7 @@ async show(req, res) {
       return res.status(400).json({ error: `Titulo já ou nome da imagem já cadastrados.` });
     }
   },
-
+// edita um filme pelo id passado 
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -112,6 +116,7 @@ async show(req, res) {
       return res.status(400).json({ error: 'Erro desconhecido' });
     }
   },
+  // pesquisa o filme pelo texto passado
   async search(req, res) {
     try {
       const { titulo } = req.params;
@@ -136,6 +141,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
+  // deleta o filme passado por id 
   async delete(req, res) {
     try {
       const { id } = req.params;

@@ -1,9 +1,11 @@
-
+// arquivso de funções diversas
 module.exports = {
+// simplifica texto para comparação 
 simplify(text){
 text= text.replace(/\s/g, '');
 return text.toUpperCase()
 },
+// confere se a data da sessão é em menos ou mais que dez dias  
 dezDias(sessionDate){
     const moment = require('./moment.js');
     const now  = moment.tz( "America/Sao_Paulo").format('YYYY-MM-DD');
@@ -16,6 +18,7 @@ dezDias(sessionDate){
         return false;
     }
 },
+// soma duas horas
 somaHoras(x, y){
     var hora = this.formataHora(x)
     horario=y.split("")
@@ -30,6 +33,7 @@ somaHoras(x, y){
     var horaFinal= hour+":"+min+":00"
     return horaFinal
 },
+// confere se o horário passado está disponivel na sala passada
 async sessionSala(roomId, horario, horarioFinal,date ) {
     const Sessions = require( './src/models/sessions');
     const sessionsRoom= await Sessions.findAll({where: {
@@ -68,8 +72,8 @@ async sessionSala(roomId, horario, horarioFinal,date ) {
     }else{
         return true
         }
-        //   return res.json();
     },
+    // formata o horário que vem do bd para o formato de date
     formataHora(h){
             var d = new Date();
             var year = d.getFullYear();
@@ -81,6 +85,7 @@ async sessionSala(roomId, horario, horarioFinal,date ) {
             var hora = new Date(year,month,day,hour,min)
             return hora
     },
+// confere se os assentos passados estão disponiveis na sessão passada
     async confereAssentos(selecionados, session) {
         const Seats = require( './src/models/seats');
         const seatsSession= await Seats.findAll({where: {
@@ -100,6 +105,7 @@ async sessionSala(roomId, horario, horarioFinal,date ) {
             return true
         }
     },
+// confere se o horario e data passados ja aconteceram
     confereRealizado(horario, data){
         var hora=this.juntaDataHora(horario, data)
         var now= new Date()
@@ -109,6 +115,7 @@ async sessionSala(roomId, horario, horarioFinal,date ) {
             return false
         }
 },
+// junta a data e a hora que vem separados do bd em uma data no formato Date
 juntaDataHora(horario, data){
     var d = new Date(data);
     var year = d.getFullYear();
@@ -120,6 +127,7 @@ juntaDataHora(horario, data){
     var hora = new Date(year,month,day,hour,min)
     return hora
 },
+// envia notificação para o usuário quando sessão é deletada
 async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
     const Seats = require( './src/models/seats');
     const Sessions = require( './src/models/sessions');
@@ -187,6 +195,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
     return true
     }
     },
+    // passa o faturamento total da sessão para o filme depois que ela acontece e muda o status dela para 2 (ja aconteceu)
     async attFaturamentos(){
         const Sessions = require( './src/models/sessions');
         const sessions= await Sessions.findAll()
@@ -210,6 +219,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
             return true
         }
     },
+    // criar os registros de preço e o usuário adm 
     async start(){
         const Prices = require( './src/models/prices');
         const prices= await Prices.findAll()
@@ -224,6 +234,7 @@ async notificacao(session,data,horario,horarioFinal, movieId, animacao, audio) {
         } 
         
     },
+    // formata a data para BR
     formataData(x){
         data=new Date(x)
         data=new Date(data.getTime() + (1 * 24 * 60 * 60 * 1000))

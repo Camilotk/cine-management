@@ -1,3 +1,4 @@
+// models iniciam as tabelas no sequelize, são usados no arquivo index da pasta database
 const {Model, DataTypes} = require('sequelize');
 
 class Notifications extends Model {

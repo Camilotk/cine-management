@@ -1,7 +1,9 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Users = require('../models/users')
 const Functions = require( '../../functions');
 const sequelize =require('sequelize')
 module.exports = {
+  // acessa todos os usuarios e retorna paginado
   async index(req, res) {
     try {
       const { page=1 }= req.query;
@@ -25,6 +27,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no users, my friend :(` });
     }
   },
+  // acessa todos os usuário em ordem de faturamento e paginados
   async relIndex(req, res) {
     try {
       const { page=1 }= req.query;
@@ -41,7 +44,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no users, my friend :(` });
     }
   },
-
+// acessa apenas um usuário
 async show(req, res) {
     try {
       const { id } = req.params;
@@ -51,6 +54,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
+  // pesquisa usuario por texto passado
   async search(req, res) {
     try {
       const { nome } = req.params;
@@ -75,7 +79,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
-
+//  cria um usuario 
   async store(req, res) {
     try {
       req.body.faturamento= '0.00'
@@ -87,7 +91,7 @@ async show(req, res) {
       return res.status(400).json({ error: `Oops, something went wrong :(` });
     }
   },
-
+// edita um usuario 
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -98,13 +102,12 @@ async show(req, res) {
       return res.status(400).json({ error: `Oops, something went wrong :(` });
     }
   },
-
+// deleta um usuario 
   async delete(req, res) {
     try {
       const { id } = req.params;
       
       const users = await Users.findByPk(id);
-      console.log(users)
       const { nome } = users;
       users.destroy();
 

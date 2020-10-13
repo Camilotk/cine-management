@@ -1,3 +1,4 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Seats = require( '../models/seats');
 const Users = require( '../models/users');
 const Sessions = require( '../models/sessions');
@@ -6,6 +7,7 @@ const Functions = require( '../../functions');
 const { use } = require('../routes');
 
 module.exports = {
+  // acessa todos os assentos reservados
   async index(req, res) {
     try {
         const seats = await Seats.findAll({
@@ -28,7 +30,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no rooms, my friend :(` });
     }
   },
-
+// acessa uma reserva de assento 
 async show(req, res) {
     try {
       const { id } = req.params;
@@ -40,7 +42,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
-
+// criar yma reserva de assento, conferindo se estão disponiveis e adicionando o valor referente ao faturamento da sessão e aos gastos do usuario 
   async store(req, res) {
     try {
         const {user_id, refAssentos, session_id} = req.body;

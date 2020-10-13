@@ -1,9 +1,11 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Sessions = require( '../models/sessions');
 const Rooms = require( '../models/rooms');
 const Movies = require( '../models/movies');
 const Functions = require( '../../functions');
 const sequelize=require("sequelize")
 module.exports = {
+  // acessa todas as sessoes e retona paginado 
   async index(req, res) {
     try {
       const { page=1 }= req.query;
@@ -26,6 +28,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no sessions, my friend :(` });
     }
   },
+  // acessa todas as sessoes ordenadas da data mais baixa para mais alta
   async allIndex(req, res) {
     try {
       const options = {
@@ -46,6 +49,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no sessions, my friend :(` });
     }
   },
+  // acessa todas as sessoes da data passada
   async indexByDate(req, res) {
     try {
       const {data}= req.params
@@ -68,6 +72,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no sessions, my friend :(` });
     }
   },
+  // acessa apenas uma sessão 
   async show(req, res) {
     try {
       const { id } = req.params;
@@ -80,7 +85,7 @@ module.exports = {
       return res.status(400).json( error );
     }
   },
-
+// cria uma sessão apenas se a data dela for futura e se o horario estiver disponivel 
   async store(req, res) {
     try {
         const {data, horario, animacao, audio, movie_id, room_id} = req.body;
@@ -124,6 +129,7 @@ module.exports = {
       return res.status(400).json({ error: `Oops, something went wrong :(` });
     }
   },
+  // pesquisa sessao pelo texto passado
   async search(req, res) {
     try {
       const { text } = req.params;
@@ -151,6 +157,7 @@ module.exports = {
       return res.status(400).json( error );
     }
   },
+  // deleta sessão se falta mais de dez dias para ela envia notificação para usuários que tem assentos reservados para ela 
   async delete(req, res) {
     try {
       const { id } = req.params

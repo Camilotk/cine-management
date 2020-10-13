@@ -1,7 +1,9 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Rooms = require( '../models/rooms');
 const Sessions = require( '../models/sessions');
 const Functions = require( '../../functions');
 module.exports = {
+  // acessa todas as salas e retorna com paginação
   async index(req, res) {
     try {
       const { page=1 }= req.query;
@@ -17,6 +19,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no rooms, my friend :(` });
     }
   },
+  // acessa todas as salas sem paginação 
   async indexAll(req, res) {
     try {
       
@@ -27,7 +30,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no rooms, my friend :(` });
     }
   },
-
+// acessa apenas uma sala
 async show(req, res) {
     try {
       const { id } = req.params;
@@ -37,7 +40,7 @@ async show(req, res) {
       return res.status(400).json( error );
     }
   },
-
+// cria uma sala 
   async store(req, res) {
     try {
     const rooms = await Rooms.create(req.body);
@@ -46,7 +49,7 @@ async show(req, res) {
       return res.status(400).json({ error: `Erro, o nome da sala já está cadastrado ou o numero de assentos não é adequado (20-100)` });
     }
   },
-
+// edita a uam sala passada pelo id (não permite editar o nome para um nome ja existente)
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -65,6 +68,7 @@ async show(req, res) {
       return res.status(400).json({ error: `Erro, o nome da sala já está cadastrado ou o numero de assentos não é adequado (20-100)` });
     }
   },
+  // pesquisa sala por texto passado
   async search(req, res) {
     try {
       const { nome } = req.params;
@@ -92,7 +96,7 @@ async show(req, res) {
 
  
 
-
+// deleta sala se não há sessoes futuras vinculadas a ela 
   async delete(req, res) {
     try {
       const { id } = req.params;

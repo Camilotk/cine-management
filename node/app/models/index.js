@@ -1,3 +1,4 @@
+// esse arquivo faz a mesma função do index do database de outra forma, mas não está sendo usado agora
 'use strict';
 
 const fs = require('fs');

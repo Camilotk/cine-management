@@ -1,3 +1,4 @@
+// Migrations são arquivos que configuram as tabelas MySQL e seus itens.s
 module.exports = {
   up: (queryInterface, DataTypes) => {
     return queryInterface.createTable('Prices', {

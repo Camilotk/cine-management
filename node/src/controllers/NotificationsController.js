@@ -1,7 +1,7 @@
 const Notifications = require('../models/notifications')
 
 module.exports = {
-  
+// pega todas as notificações do usuario da id passada que ainda não foram marcadas como lida 
   async index(req, res) {
     try {
       const{id}=req.params
@@ -15,6 +15,8 @@ module.exports = {
       return res.status(400).json({ error: `There's no users, my friend :(` });
     }
   },
+
+  // edita notificação (marca como lida) 
   async update(req, res) {
     try {
       const {id}=req.params

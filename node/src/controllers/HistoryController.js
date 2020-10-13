@@ -1,3 +1,4 @@
+// controllers são arquivos que aramzenam as funções para criar/editar/ler/deletar registros nas tabelas 
 const Sessions = require( '../models/sessions');
 const Rooms = require( '../models/rooms');
 const Movies = require( '../models/movies');
@@ -5,6 +6,7 @@ const Functions = require( '../../functions');
 const Seats = require('../models/seats');
 const sequelize=require('sequelize')
 module.exports = {
+  //exibe histórico do usuario passado
   async index(req, res) {
     try {
       const {id}=req.params
@@ -52,7 +54,7 @@ module.exports = {
       return res.status(400).json({ error: `There's no sessions, my friend :(` });
     }
   },
- 
+//  pesquisa no historico pelo texto passado
   async search(req, res) {
     try {
         const {id, text}=req.params
