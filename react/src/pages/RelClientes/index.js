@@ -1,3 +1,4 @@
+// arquivo da pagina relatorio de clientes
 import React from 'react';
 import api from '../../services/api';
 import './styles.css';
@@ -5,7 +6,7 @@ import { Component } from 'react';
 import Menu from '../../components/Menu'
 import Logout from '../../components/Logout'
 export default class Users extends Component{
-
+    // define states da pagina
     state= {
         users:[],
         userInfo:[],
@@ -15,16 +16,22 @@ export default class Users extends Component{
 
     }
     
+    // função executa ao pressionar enter no input de pesquisa 
     pressEnter=(e)=>{
+        // pega codigo da tecla pressionada 
         var key = e.which || e.keyCode;
+        // verifica se a tecla foi enter
         if (key == 13){
+            // pega texto digitado pelo usuario 
             var value= document.getElementById('input').value
-            
+            // seta texto no state
             this.setState({search:value})
+            // chama o load products passando pagina e valor do input como parametro 
             this.loadProducts(1, value)
         }
         
     }
+    // formata nivel de acordo com informação do bd (1=gerente 2=cliente)
     nivel(x){
         if(x==1){
             return "Gerente"
@@ -32,25 +39,30 @@ export default class Users extends Component{
             return "Cliente"
         }
     }
+     // função executada ao carregar pagina
     componentDidMount () {
         
         this.loadProducts();
     }
     
-
+     // função responsavel por carregar todas as informações variaveis 
     loadProducts = async (page = 1,state="") => {
         if(state==""){
+             // se o parametro state(texto da pesquisa) for vazio  pega todos os clientes
             var response = await api.get(`/relUsers?page=${page}`)
             
         }else{
+            // se o parametro state(texto da pesquisa) nao for vazio filtra os clientes pelo texto
             var response = await api.get(`/userSearch/${state}?page=${page}`) 
             
         }
-        
+        // pega informações de paginação da resposta da api
         const {docs, ...userInfo}= response.data;
+        // seta nos states
         this.setState({users: docs, userInfo,page})
         
     }
+    // função para voltar pagina 
     prevPage =  () => {
         const {page, userInfo} = this.state;
 
@@ -58,6 +70,7 @@ export default class Users extends Component{
         const pageNumber= page -1
         this.loadProducts(pageNumber,this.state.search)
     }
+     // função para passar pagina 
     nextPage =  () => {
         const {page, userInfo} = this.state;
 
@@ -67,8 +80,9 @@ export default class Users extends Component{
     }
     
     render(){
+    // pega as infos dos users do state
     const {users} = this.state; 
-    
+    // retorna html
     return (
         
         <React.Fragment>
@@ -94,7 +108,9 @@ export default class Users extends Component{
                 <td className='item'>Nível de acesso</td>
                 <td className='item'>Gastos</td>
             </tr>
-            {users.map(user=>(
+            {
+            // da um map nos clientes fazendo uma lista 
+            users.map(user=>(
             
                 <tr key={user.id} className='user-item'>
                     <td className='item'>{user.nome}</td>

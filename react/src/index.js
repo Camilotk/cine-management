@@ -1,3 +1,4 @@
+// este arquivo inicia o react e chama app
 import React from 'react';
 import ReactDOM from 'react-dom';
 

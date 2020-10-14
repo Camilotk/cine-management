@@ -1,3 +1,4 @@
+// arquivo da pagina cadastro
 import React, {useState, useRef} from 'react';
 import { Form } from '@unform/web';
 import "./styles.css"
@@ -9,42 +10,54 @@ import { Link, Redirect } from 'react-router-dom';
 import Functions from "../../functions"
 
 export default function Cadastro() {
+  // state para informar quando usuario foi criado 
     const [created, setcreated] = useState(false);
+  // propriedade do unform para usar ref no form
     const formRef =useRef(null)
+  // função executada ao enviar form
   const handleSubmit = async (data) => {
+    // confere senha 
     if(!Functions.senha(data.password)){
         formRef.current.setFieldError('password','A senha deve conter ao menos uma letra maiúscula, 4 minúsculas e 2 numeros.')
       }
+      // confere se confirmsenha = senha
       if(data.password!==data.confirmpassword){
         formRef.current.setFieldError('confirmpassword','Senhas diferentes')
       }
+      // confere nome 
       if(!Functions.nome(data.nome)){
         formRef.current.setFieldError('nome','O nome deve ter ao menos 4 caracteres.')
       }
+      // confere email 
       if( ! await Functions.email(data.email)){
         formRef.current.setFieldError('email','Email invalido ou ja está cadastrado.')
       }
+      // junta o inverso de todas as verificações anteriores para confirmar envio 
       if(Functions.senha(data.password) && data.password==data.confirmpassword && Functions.nome(data.nome) && await Functions.email(data.email)){
         
         okCreate(data)
       }
   }
+  // cria registro no bd 
   const okCreate= async (data) => {
       try{
+        // criptografa senha 
         data.password=Functions.criptografar(data.password)
+        // chama api 
       const response = await api.post(`/users`, data)  
+      // seta o state created para true 
       setcreated(true)
       }catch(response){
         alert(response.response.data.error)
     }
   };
-  const reload=()=>{
-    window.location.reload()
-  }
   
+  
+  // retorna html
   return (
     
     <>
+    {/* se created=true redireciona para pagina login */}
     {created ? <Redirect to="/" /> : ''}
     <div className="logoBox"><img className="logo" src={Logo}></img></div>
       <div className="conteudo">

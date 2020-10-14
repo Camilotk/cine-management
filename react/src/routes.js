@@ -1,6 +1,6 @@
+// este arquivo define as rotas e suas permiçoes 
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-
 import EditUser from './pages/EditUser';
 import EditUserGer from './pages/EditUserGer';
 import RelMovies from './pages/RelMovies';
@@ -39,6 +39,7 @@ const Routes = () => {
   </BrowserRouter>
 )
 };
+// proteje rotas de gerente
 const ProtectedRoute=({auth, component:Component,...rest})=>{
   return(
     <Route {...rest}
@@ -54,6 +55,7 @@ const ProtectedRoute=({auth, component:Component,...rest})=>{
     />
   )
 }
+// proteje rotas de usuario
 const ProtectedUserRoute=({auth, component:Component,...rest})=>{
   return(
     <Route {...rest}
@@ -69,6 +71,7 @@ const ProtectedUserRoute=({auth, component:Component,...rest})=>{
     />
   )
 }
+// proteje rotas de login
 const ProtectedLogin=({auth, component:Component,...rest})=>{
   return(
     <Route {...rest}

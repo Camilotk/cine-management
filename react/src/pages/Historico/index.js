@@ -1,12 +1,12 @@
+// arquivo pagina historico de sessoes do usuário
 import React from 'react';
 import api from '../../services/api';
 import './styles.css';
 import { Component } from 'react';
 import Header from '../../components/Header'
-
 import Cookies from "js-cookie"
 export default class Historicos extends Component{
-
+    // define states da pagina  
     state= {
         historicos:[],
         historicoInfo:[],
@@ -16,17 +16,22 @@ export default class Historicos extends Component{
 
 
     }
-    
+    // função executa ao pressionar enter no input de pesquisa 
     pressEnter=(e)=>{
+        // pega codigo da tecla pressionada 
         var key = e.which || e.keyCode;
+        // verifica se a tecla foi enter
         if (key == 13){
+            // pega texto digitado pelo usuario 
             var value= document.getElementById('input').value
-            
+            // seta texto no state
             this.setState({search:value})
+            // chama o load products passando pagina e valor do input como parametro 
             this.loadProducts(1, value)
         }
         
     }
+    // formata data em formato dd/mm/aa
     data(x){
         x=x.replace('Z','')
         var d = new Date(x);
@@ -37,30 +42,35 @@ export default class Historicos extends Component{
         month=("00" + month).slice(-2)
         return(day+'/'+month+'/'+year)
     }
+    // função executada ao carregar pagina 
     componentDidMount () {
         
         this.loadProducts();
     }
     
-
+    // função responsavel por carregar todas as informações variaveis 
     loadProducts = async (page = 1,state="") => {
         try{
+        // pega id do user no cookie
         const user =Cookies.get('user')
         if(state==""){
-            
+            // se o parametro state(texto da pesquisa) for vazio  paga todos os historicos
             var response = await api.get(`/historicos/${user}?page=${page}`)
             
         }else{
+            // se o parametro state(texto da pesquisa) nao for vazio filtra os historicos pelo texto
             var response = await api.get(`/historicoSearch/${user}/${state}?page=${page}`) 
             
         }
-        
+        // pega informações de paginação da resposta da api
         const {docs, ...historicoInfo}= response.data;
+        // seta nos states
         this.setState({historicos: docs, historicoInfo,page})
     }catch(response){
         this.setState({error:response.response.data.error})
     }
     }
+    // função para voltar pagina 
     prevPage =  () => {
         const {page, historicoInfo} = this.state;
 
@@ -68,6 +78,7 @@ export default class Historicos extends Component{
         const pageNumber= page -1
         this.loadProducts(pageNumber,this.state.search)
     }
+    // função para passar pagina 
     nextPage =  () => {
         const {page, historicoInfo} = this.state;
 
@@ -75,16 +86,18 @@ export default class Historicos extends Component{
         const pageNumber= page +1
         this.loadProducts(pageNumber,this.state.search)
     }
-    
+     
     render(){
+    // pega as infos dos historicos do state 
     const {historicos} = this.state; 
     
-    
+    // retorna html
     return (
         
         <React.Fragment>
             <Header/> 
             <div className="content" >
+                {/* se não há nenhum historico exibe este erro  */}
     {this.state.error!==''? <div className="vazio">{this.state.error}</div>:<>
         <div className="top" style={{justifyContent:"flex-end"}}>
             <div className="submit-line">
@@ -104,7 +117,9 @@ export default class Historicos extends Component{
                 <td className='item'>Data</td>
                 
             </tr>
-            {historicos.map(historico=>(
+            {
+            // da um map nos históricos fazendo uma lista 
+            historicos.map(historico=>(
             
                 <tr key={historico.id} className='historico-item'>
                     <td className='item'>{historico.movies.titulo}</td>

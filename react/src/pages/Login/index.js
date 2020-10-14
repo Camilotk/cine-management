@@ -1,3 +1,4 @@
+// arquivo da pagina login
 import React, {useState, useRef} from 'react';
 import { Form } from '@unform/web';
 import "./styles.css"
@@ -11,25 +12,27 @@ import AuthApi from "../../AuthApi"
 import Cookies from "js-cookie"
 
 export default function Login() {
-  
+  // importa o context da api de autenticação 
   const Auth=React.useContext(AuthApi)
  
-  
+  // state para setar se exibe ou não aviso de erro 
   const [aviso, setaviso] = useState(false);  
-  
+  // propriedade do unform para usar ref no form
     const formRef =useRef(null)
+    // função executada ao enviar form
   const handleSubmit = async (data) => {
     const response = await api.get(`/allUsers`)
 
-    
+    // da um map em todos os users , cinfere se algum tem o mesmo emial e a mesma senha digitados no form 
     response.data.map(user=>{
       if((user.email==data.email)&&(user.password==Functions.criptografar(data.password))){
-        
+        // se sim define o nivel na autenticação e o user e o nivel em cookies 
         Auth.setAuth(user.nivel)
         Cookies.set("user", `${user.id}`)
         Cookies.set("nivel", `${user.nivel}`)
         
       }else(
+        // senao exibe aviso de erro
         setaviso(true)
       )
       
@@ -37,10 +40,7 @@ export default function Login() {
     
   }
   
-  const reload=()=>{
-    window.location.reload()
-  }
-  
+  // retorna html
   return (
     
     <>

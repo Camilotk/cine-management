@@ -1,6 +1,7 @@
+// arquivos de funçoes diversas
 const api=require('./services/api')
-
 module.exports = {
+// valida senha
 senha(senha){
     var validate= false
     var numeros="0123456789"
@@ -32,6 +33,7 @@ if(maiusculas>0 && minusculas>3 && number>1){
      
      return(validate)
   },
+// valida nome
 nome(nome){
    
     if(nome.length<=4){
@@ -40,7 +42,7 @@ nome(nome){
         return(true)
     }
 },
-
+// valida email
 async email(email){
     var usuario = email.substring(0, email.indexOf("@"));
     var dominio = email.substr(email.indexOf("@")+ 1, email.length);
@@ -73,6 +75,7 @@ async email(email){
             return(false)
         }
 },
+// valida email para edição (pq se fosse a mesma função ele não deixaria editar mantendo o mesmo email)
 async editEmail(email,atual){
  
     var usuario = email.substring(0, email.indexOf("@"));
@@ -109,6 +112,7 @@ async editEmail(email,atual){
             return(false)
         }
 },
+// criptografa senha 
  criptografar(senha) {
     const crypto = require("crypto");
     const cipher = crypto.createCipher("aes256","chaves","hex");

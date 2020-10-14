@@ -1,3 +1,4 @@
+// pagina identica a EditUser, o que muda é que importa os components Menu e Logout no lugar de Header, use os comentarios de EditUser caso haja duvidas
 import React, {useState, useRef} from 'react';
 import { Form } from '@unform/web';
 import "./styles.css"

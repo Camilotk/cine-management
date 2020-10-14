@@ -1,3 +1,4 @@
+// arquivo da pagina sessoes
 import React from 'react';
 import api from '../../services/api';
 import './styles.css';
@@ -8,7 +9,7 @@ import Logout from '../../components/Logout'
 import ModalCreate from '../../components/SessionsModals/ModalCreate'
 
 export default class Sessions extends Component{
-
+    // define states da pagina
     state= {
         sessions:[],
         sessionInfo:[],
@@ -17,17 +18,22 @@ export default class Sessions extends Component{
 
 
     }
-    
+    // função executa ao pressionar enter no input de pesquisa 
     pressEnter=(e)=>{
+        // pega codigo da tecla pressionada 
         var key = e.which || e.keyCode;
+        // verifica se a tecla foi enter
         if (key == 13){
+            // pega texto digitado pelo usuario 
             var value= document.getElementById('input').value
-            
+            // seta texto no state
             this.setState({search:value})
+            // chama o load products passando pagina e valor do input como parametro 
             this.loadProducts(1, value)
         }
         
     }
+    // função para formatar animação de acordo com info do bd (1,2= 2d,3d)
     animacao(x){
         if(x==1){
             return "2D"
@@ -35,6 +41,7 @@ export default class Sessions extends Component{
             return "3D"
         }
     }
+    // função para formatar audio de acordo com info do bd (1,2= dub,leg)
     audio(x){
         if(x==1){
             return "Dublado"
@@ -42,6 +49,7 @@ export default class Sessions extends Component{
             return "Legendado"
         }
     }
+    // formata data do bd para dd/mm/aa
     data(x){
         x=x.replace('Z','')
         var d = new Date(x);
@@ -52,25 +60,30 @@ export default class Sessions extends Component{
         month=("00" + month).slice(-2)
         return(day+'/'+month+'/'+year)
     }
+    // função executada ao carregar pagina
     componentDidMount () {
         
         this.loadProducts();
     }
     
-
+    // função responsavel por carregar todas as informações variaveis 
     loadProducts = async (page = 1,state="") => {
         if(state==""){
+            // se o parametro state(texto da pesquisa) for vazio  pega todos as sessoes
             var response = await api.get(`/sessions?page=${page}`)
             
         }else{
+            // se o parametro state(texto da pesquisa) nao for vazio filtra as sessoes pelo texto
             var response = await api.get(`/sessionSearch/${state}?page=${page}`) 
             console.log(response)
         }
-        
+        // pega informações de paginação da resposta da api
         const {docs, ...sessionInfo}= response.data;
+        // seta nos states
         this.setState({sessions: docs, sessionInfo,page})
         
     }
+    // função para voltar pagina 
     prevPage =  () => {
         const {page, sessionInfo} = this.state;
 
@@ -78,6 +91,7 @@ export default class Sessions extends Component{
         const pageNumber= page -1
         this.loadProducts(pageNumber,this.state.search)
     }
+    // função para passar pagina
     nextPage =  () => {
         const {page, sessionInfo} = this.state;
 
@@ -87,8 +101,9 @@ export default class Sessions extends Component{
     }
     
     render(){
+    // pega as infos das sessoes do state
     const {sessions} = this.state; 
-    
+    // retorna html
     return (
         
         <React.Fragment>
@@ -118,7 +133,9 @@ export default class Sessions extends Component{
                 <td className='item'>Áudio</td>
                 <td className='item'>Operações</td>
             </tr>
-            {sessions.map(session=>(
+            {
+            // da um map nas salas fazendo uma lista 
+            sessions.map(session=>(
             
                 <tr key={session.id} className='session-item'>
                     <td className='item'>{session.movies.titulo}</td>

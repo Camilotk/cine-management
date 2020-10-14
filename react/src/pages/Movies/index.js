@@ -1,3 +1,4 @@
+// arquivo da pagina filmes 
 import React from 'react';
 import api from '../../services/api';
 import './styles.css';
@@ -8,7 +9,7 @@ import ModalEdit from '../../components/MoviesModals/ModalEdit'
 import ModalCreate from '../../components/MoviesModals/ModalCreate'
 import Logout from '../../components/Logout'
 export default class Movies extends Component{
-
+    // define states da pagina 
     state= {
         movies:[],
         movieInfo:[],
@@ -18,36 +19,45 @@ export default class Movies extends Component{
 
     }
     
+    // função executa ao pressionar enter no input de pesquisa 
     pressEnter=(e)=>{
+        // pega codigo da tecla pressionada 
         var key = e.which || e.keyCode;
+        // verifica se a tecla foi enter
         if (key == 13){
+            // pega texto digitado pelo usuario 
             var value= document.getElementById('input').value
-            
+            // seta texto no state
             this.setState({search:value})
+            // chama o load products passando pagina e valor do input como parametro 
             this.loadProducts(1, value)
         }
         
     }
-    
+     // função executada ao carregar pagina 
     componentDidMount () {
         
         this.loadProducts();
     }
     
-
+    // função responsavel por carregar todas as informações variaveis 
     loadProducts = async (page = 1,state="") => {
         if(state==""){
+            // se o parametro state(texto da pesquisa) for vazio  pega todos os filmes
             var response = await api.get(`/movies?page=${page}`)
             
         }else{
+            // se o parametro state(texto da pesquisa) nao for vazio filtra os filmes pelo texto
             var response = await api.get(`/movieSearch/${state}?page=${page}`) 
             
         }
-        
+         // pega informações de paginação da resposta da api
         const {docs, ...movieInfo}= response.data;
+        // seta nos states
         this.setState({movies: docs, movieInfo,page})
         
     }
+    // função para voltar pagina 
     prevPage =  () => {
         const {page, movieInfo} = this.state;
 
@@ -55,6 +65,7 @@ export default class Movies extends Component{
         const pageNumber= page -1
         this.loadProducts(pageNumber,this.state.search)
     }
+    // função para passar pagina 
     nextPage =  () => {
         const {page, movieInfo} = this.state;
 
@@ -64,8 +75,9 @@ export default class Movies extends Component{
     }
     
     render(){
+     // pega as infos dos movies do state 
     const {movies} = this.state; 
-    
+    // retorna html
     return (
         
         <React.Fragment>
@@ -92,7 +104,9 @@ export default class Movies extends Component{
                 <td className='item'>Duração</td>
                 <td className='item'>Operações</td>
             </tr>
-            {movies.map(movie=>(
+            {
+            // da um map nos filmes fazendo uma lista 
+            movies.map(movie=>(
             
                 <tr key={movie.id} className='movie-item'>
                     <td className='item'>{movie.titulo}</td>
