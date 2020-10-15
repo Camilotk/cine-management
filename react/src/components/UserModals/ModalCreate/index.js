@@ -1,3 +1,4 @@
+// arquivo do modal de criação de usuarios
 import React, {useState, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -7,7 +8,7 @@ import api from '../../../services/api';
 import Input from '../../Form/input';
 import Select from '../../Form/select';
 import Functions from '../../../functions';
-
+// define posição do modal
 function getModalStyle() {
   const top = 50 ;
   const left = 50;
@@ -18,7 +19,7 @@ function getModalStyle() {
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
-
+// define estilo do modal
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -32,39 +33,48 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleModal(item) {
+  // define os estilos definidos em useStyles na const cLasses
   const classes = useStyles();
+  // propriedade do unform para usar ref no form
   const formRef =useRef(null)
-
+  // states do modal
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [created, setcreated] = useState(false);
+  // executa ao enviar o form
   const handleSubmit = async (data) => {
+    // confere senha 
     if(!Functions.senha(data.password)){
       formRef.current.setFieldError('password','A senha deve conter ao menos uma letra maiúscula, 4 minúsculas e 2 numeros.')
     }
+    // confere se a senha é igual a confirma senha 
     if(data.password!==data.confirmpassword){
       formRef.current.setFieldError('confirmpassword','Senhas diferentes')
     }
+    // confere nome
     if(!Functions.nome(data.nome)){
       formRef.current.setFieldError('nome','O nome deve ter ao menos 4 caracteres.')
     }
+    // confere email
     if( ! await Functions.email(data.email)){
       formRef.current.setFieldError('email','Email invalido ou ja está cadastrado.')
     }
+    // confere o inverso de todas as verificações anteriores
     if(Functions.senha(data.password) && data.password==data.confirmpassword && Functions.nome(data.nome) && await Functions.email(data.email)){
       okCreate(data)
     }
       
       
   }
+  // função executada ao abrir o modal
   const handleOpen = () => {
   setOpen(true); 
   };
-
+  // função executada ao fechar modal
   const handleClose = () => {
     setOpen(false);
   };
-  
+  // função para criar definitivamente
   const okCreate= async (data) => {
       try{
         delete data['confirmpassword'];
@@ -77,9 +87,11 @@ export default function SimpleModal(item) {
    
   
   };
+  // recarrega pagina
   const reload=()=>{
     window.location.reload()
   }
+  // retorna html primeira etapa
   const body = (
       
     <div style={modalStyle } className={classes.paper}>
@@ -110,6 +122,7 @@ export default function SimpleModal(item) {
       </Form>
     </div>
   );
+  // retorna html segunda etapa 
   const body2 = (
       
     <div style={ modalStyle } className={classes.paper}>
@@ -125,6 +138,7 @@ export default function SimpleModal(item) {
       </div>
     </div>
   );
+  // retorna html botao
   return (
     <>
       <button type="button" style={{background:'none', border:'none'}} onClick={handleOpen}>

@@ -1,3 +1,4 @@
+// item com imagem do usuário no menu, mesma coisa que o menu item, apenas muda a classe do li para definir um estilo diferente
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 

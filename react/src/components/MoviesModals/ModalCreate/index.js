@@ -1,3 +1,4 @@
+// arquivo do modal de criação de filme 
 import React, {useState, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -6,6 +7,7 @@ import "./styles.css"
 import api from '../../../services/api';
 import Input from '../../Form/input';
 import File from '../../Form/file';
+// define posição do modal
 function getModalStyle() {
   const top = 50 ;
   const left = 50;
@@ -16,7 +18,7 @@ function getModalStyle() {
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
-
+// define estilo do modal
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -30,42 +32,53 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleModal(item) {
+  // define os estilos definidos em useStyles na const cLasses
   const classes = useStyles();
+  // propriedade do unform para usar ref no form
   const formRef =useRef(null)
-
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  // states do modal
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
   const [created, setcreated] = useState(false);
+  // executa ao enviar o form
   const handleSubmit = async (data) => {
+    // confere se o formato e o tamanho estão de acordo 
       if(confExt()&& confSize()){
 
         okCreate(data)
       }
       
   }
+  // função executada ao abrir o modal 
   const handleOpen = () => {
   setOpen(true); 
   };
-
+  // função executada ao fechar modal
   const handleClose = () => {
     setOpen(false);
   };
-  
+  // função responsavel por enviar arquivo da imagem para api
   const processUpload = (uploadedFile, name) => {
+    // new FormData simula um envio de form do tipo arquivo
     const data = new FormData();
 
     data.append("file", uploadedFile, name);
 
     api.post("/posts", data);
   };
+  // função para criar definitivamente
   const okCreate= async (data) => {
       try{
+        // pega extensão do arquivo 
       var ext = data.file.name.split('.').pop();
+      // define o nome da imagem com o nome digitado pelo usuario + extensão 
       data.imagem=data.imagem+'.'+ext
+      // atualiza na api 
       const response = await api.post(`/${item.where}`, data)  
       setcreated(true)
       
       var name=data.imagem
+      // chama a função de upload de arquivo
       processUpload(data.file,name)
       }catch(response){
         alert(response.response.data.error)
@@ -73,9 +86,11 @@ export default function SimpleModal(item) {
    
   
   };
+  // recarrega pagina
   const reload=()=>{
     window.location.reload()
   }
+  // função para conferir se tamanho do arquivo não ultrapassa 2mb 
   const confSize=()=>{
     var file= formRef.current.getFieldValue('file')
     var maxSize=2 * 1024 * 1024
@@ -86,6 +101,7 @@ export default function SimpleModal(item) {
       return true
     }
   }
+  // função para coonferir se tipo de arquivo é permitido 
   const confExt=()=>{
     var file= formRef.current.getFieldValue('file')
     const types = [
@@ -103,6 +119,7 @@ export default function SimpleModal(item) {
     }
   
   }
+  // retorna html primeira etapa 
   const body = (
       
     <div style={modalStyle } className={classes.paper}>
@@ -128,6 +145,7 @@ export default function SimpleModal(item) {
       </Form>
     </div>
   );
+  // retorna html segunda etapa 
   const body2 = (
       
     <div style={ modalStyle } className={classes.paper}>
@@ -143,6 +161,7 @@ export default function SimpleModal(item) {
       </div>
     </div>
   );
+  // retorna html botao
   return (
     <>
       <button type="button" style={{background:'none', border:'none'}} onClick={handleOpen}>

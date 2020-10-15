@@ -1,3 +1,4 @@
+// arquivo modal delete salas
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -5,7 +6,7 @@ import "./styles.css"
 import api from '../../../services/api';
 
 
-
+// define posição do modal
 function getModalStyle() {
   const top = 50 ;
   const left = 50;
@@ -16,7 +17,7 @@ function getModalStyle() {
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
-
+// define estilo do modal
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -30,22 +31,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleModal(item) {
-    
+  // define os estilos definidos em useStyles na const cLasses
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
+  // states do modal
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [deleted, setdeleted] = useState(false);
-
+  // função executada ao abrir o modal
   const handleOpen = () => {
     setOpen(true);
    
   };
-
+  // função executada ao fechar modal
   const handleClose = () => {
     setOpen(false);
   };
-  
+  // função para deletar definitivamente
   const okDelete = async () => {
     try{
         const response = await api.delete(`/${item.where}/${item.id}`)
@@ -57,9 +58,11 @@ export default function SimpleModal(item) {
    
   
   };
+  // recarrega a pagina
   const reload=()=>{
     window.location.reload()
   }
+  // retorna html primeira etapa
   const body = (
       
     <div style={modalStyle } className={classes.paper}>
@@ -84,6 +87,7 @@ export default function SimpleModal(item) {
       </div>
     </div>
   );
+  // retorna html segunda etapa
   const body2 = (
       
     <div style={ modalStyle } className={classes.paper}>
@@ -99,6 +103,7 @@ export default function SimpleModal(item) {
       </div>
     </div>
   );
+  // retorna html botao
   return (
     <>
       <button type="button" style={{background:'none', border:'none'}} onClick={handleOpen}>
